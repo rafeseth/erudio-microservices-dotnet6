@@ -31,7 +31,25 @@ namespace GeekShopping.ProductAPI.Repository
             await _context.SaveChangesAsync();
             return _mapper.Map<ProductVO>(product);
         }
-        public async Task<bool> Delete(int id)
+        
+        public async Task<IEnumerable<ProductVO>> FindAll()
+        {
+            List<Product> products = await _context.Products.ToListAsync();
+            return _mapper.Map<List<ProductVO>>(products);
+        }
+
+        public async Task<ProductVO> FindById(long id)
+        {
+            Product product = await _context.Products.Where(p => p.Id==id).FirstOrDefaultAsync();
+            return _mapper.Map<ProductVO>(product);
+        }
+
+        public Task<ProductVO> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> Delete(long id)
         {
             try
             {
@@ -49,23 +67,5 @@ namespace GeekShopping.ProductAPI.Repository
                 return false;
             }
         }
-
-        public async Task<IEnumerable<ProductVO>> FindAll()
-        {
-            List<Product> products = await _context.Products.ToListAsync();
-            return _mapper.Map<List<ProductVO>>(products);
-        }
-
-        public async Task<ProductVO> FindById(int id)
-        {
-            Product product = await _context.Products.Where(p => p.Id==id).FirstOrDefaultAsync();
-            return _mapper.Map<ProductVO>(product);
-        }
-
-        public Task<ProductVO> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }
